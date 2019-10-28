@@ -1,16 +1,17 @@
-AWSTemplateFormatVersion: 2010-09-09T00:00:00.000Z
-Transform: 'AWS::Serverless-2016-10-31'
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+
 Globals:
   Function:
-    PermissionsBoundary:
-      'Fn::Sub': >-
-        arn:${AWS::Partition}:iam::${AWS::AccountId}:policy/${AppId}-${AWS::Region}-PermissionsBoundary
+    PermissionsBoundary: !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:policy/${AppId}-${AWS::Region}-PermissionsBoundary'
+
 Parameters:
   AppId:
     Type: String
+
 Resources:
   snsPayloadLoggerFunction:
-    Type: 'AWS::Serverless::Function'
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./
       Handler: src/handlers/sns-payload-logger.snsPayloadLoggerHandler
@@ -23,8 +24,6 @@ Resources:
         SimpleTopicEvent:
           Type: SNS
           Properties:
-            Topic:
-              Ref: SimpleTopic
-      Description: ''
+            Topic: !Ref SimpleTopic
   SimpleTopic:
-    Type: 'AWS::SNS::Topic'
+    Type: AWS::SNS::Topic
